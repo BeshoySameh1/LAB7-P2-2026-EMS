@@ -1,6 +1,8 @@
 package model;
 
 public class PartTimeEmployee extends Employee {
+    private static final long serialVersionUID = 1L;
+
     private double hourlyRate;
     private double hoursWorked;
 
@@ -49,8 +51,4 @@ public class PartTimeEmployee extends Employee {
         return "Rate: " + hourlyRate + " EGP/hour, Hours: " + hoursWorked;
     }
 
-    @Override
-    public String toFileString() {
-        return getEmployeeType().name() + "," + baseFileString() + "," + hourlyRate + "," + hoursWorked;
-    }
 }

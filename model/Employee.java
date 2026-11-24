@@ -1,6 +1,10 @@
 package model;
 
-public abstract class Employee {
+import java.io.Serializable;
+
+public abstract class Employee implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private int id;
     private String fullName;
     private int age;
@@ -19,7 +23,6 @@ public abstract class Employee {
     public abstract double calculateSalary();
     public abstract EmployeeType getEmployeeType();
     public abstract String getSalaryDetails();
-    public abstract String toFileString();
 
     public int getId() {
         return id;
@@ -76,7 +79,4 @@ public abstract class Employee {
         this.position = position.trim();
     }
 
-    protected String baseFileString() {
-        return id + "," + fullName + "," + age + "," + department.getId() + "," + position;
-    }
 }

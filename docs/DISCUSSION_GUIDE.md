@@ -4,20 +4,20 @@ Use this guide to explain the current Employee Management System implementation 
 
 ## Short overview
 
-The project separates employee and department data from the operations that manage them. The model classes represent the records and calculate salaries. The manager classes validate requests and perform the operations. `FileHandler` saves the current records as text files.
+The project separates employee and department data from the operations that manage them. The model classes represent the records and calculate salaries. The manager classes validate requests and perform the operations. `FileHandler` saves and loads records using Java object serialization.
 
 ## How the pieces fit together
 
 | Class or group | What it does |
 | --- | --- |
 | `Department` | Stores a department ID and name. Its ID is fixed after construction. |
-| `Employee` | Stores fields shared by all employees and defines the salary and serialization operations that subclasses implement. |
+| `Employee` | Stores fields shared by all employees and defines the salary operations that subclasses implement. |
 | `FullTimeEmployee` | Adds basic salary and bonus; total salary is their sum. |
 | `PartTimeEmployee` | Adds hourly rate and hours worked; total salary is rate multiplied by hours. |
 | `EmployeeType` | Defines the two supported employee types and their display names. |
 | `DepartmentManager` | Adds, finds, lists, and removes departments, while preventing duplicate departments and removal of a department that still has employees. |
 | `EmployeeManager` | Adds, edits, deletes, searches, and filters employees. It also checks employee data and verifies that the selected department exists. |
-| `FileHandler` | Creates the data directory when needed and writes department or employee records using UTF-8. |
+| `FileHandler` | Creates the data directory when needed and saves or loads serialized department and employee objects. |
 | `ValidationException` | Carries a clear, user-correctable error message from manager logic to a future user interface. |
 
 ## Example: adding an employee
@@ -51,12 +51,12 @@ Managers use `ValidationException` for these request-level errors. The model con
 
 ## Saving records
 
-`FileHandler` writes the complete in-memory lists to:
+`FileHandler` writes the complete in-memory lists as Java serialized objects to:
 
-- `data/departments.txt`
-- `data/employees.txt`
+- `data/departments.dat`
+- `data/employees.dat`
 
-Each record occupies one line. Employee lines start with `FULL_TIME` or `PART_TIME`, followed by shared details and then the corresponding salary values. The output is UTF-8 comma-separated text.
+The manager constructors load these files automatically. Construct `DepartmentManager` before `EmployeeManager`; employee references are reconnected to the department instances managed by the department manager. Existing `.txt` files are not imported into the serialized format.
 
 ## Discussion talking points
 
@@ -69,8 +69,7 @@ Each record occupies one line. Employee lines start with `FULL_TIME` or `PART_TI
 ## Current boundaries and next steps
 
 - There is no user interface in the current repository; a UI or command-line layer can call the manager methods and display validation messages.
-- Saving is implemented, but loading records at startup is not. Each manager starts with an empty list, so a later session does not reconstruct records from the saved files yet.
-- The text format does not escape commas or line breaks inside names and positions. A later version could add escaping or use a structured format.
+- Persistence uses Java built-in object serialization, so the files are binary and should be treated as application data rather than edited by hand.
 - There is no build file or test suite in the repository yet.
 
 These are useful next steps to mention if the discussion asks what remains before the system can be used end to end.

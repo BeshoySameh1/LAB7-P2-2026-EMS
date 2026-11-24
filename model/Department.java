@@ -1,6 +1,10 @@
 package model;
 
-public class Department {
+import java.io.Serializable;
+
+public class Department implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     private final int id;
     private String name;
 
@@ -25,10 +29,6 @@ public class Department {
             throw new IllegalArgumentException("Department name cannot be empty.");
         }
         this.name = name.trim();
-    }
-
-    public String toFileString() {
-        return id + "," + name;
     }
 
     @Override

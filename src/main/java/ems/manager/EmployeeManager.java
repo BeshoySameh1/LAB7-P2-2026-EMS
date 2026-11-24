@@ -31,6 +31,26 @@ public class EmployeeManager {
         }
         this.departmentManager = departmentManager;
         this.fileHandler = fileHandler;
+        try {
+            ArrayList<Employee> loadedEmployees = new ArrayList<>();
+            for (Employee employee : fileHandler.loadEmployees()) {
+                if (employee == null || employee.getDepartment() == null) {
+                    throw new IOException("Stored employee data contains an incomplete record.");
+                }
+                Department storedDepartment = employee.getDepartment();
+                Department managedDepartment = departmentManager.findDepartmentById(
+                        storedDepartment.getId());
+                if (managedDepartment == null) {
+                    throw new IOException("Employee " + employee.getId()
+                            + " refers to missing department " + storedDepartment.getId() + ".");
+                }
+                employee.setDepartment(managedDepartment);
+                loadedEmployees.add(employee);
+            }
+            employees.addAll(loadedEmployees);
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not load employees: " + e.getMessage(), e);
+        }
         departmentManager.registerEmployeeManager(this);
     }
 

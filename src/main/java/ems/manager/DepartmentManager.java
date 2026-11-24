@@ -23,6 +23,11 @@ public class DepartmentManager {
             throw new IllegalArgumentException("File handler cannot be null.");
         }
         this.fileHandler = fileHandler;
+        try {
+            departments.addAll(fileHandler.loadDepartments());
+        } catch (IOException e) {
+            throw new IllegalStateException("Could not load departments: " + e.getMessage(), e);
+        }
     }
 
     public void addDepartment(String idText, String name) throws ValidationException {

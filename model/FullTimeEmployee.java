@@ -1,6 +1,8 @@
 package model;
 
 public class FullTimeEmployee extends Employee {
+    private static final long serialVersionUID = 1L;
+
     private double basicSalary;
     private double bonus;
 
@@ -49,8 +51,4 @@ public class FullTimeEmployee extends Employee {
         return "Basic: " + basicSalary + " EGP, Bonus: " + bonus + " EGP";
     }
 
-    @Override
-    public String toFileString() {
-        return getEmployeeType().name() + "," + baseFileString() + "," + basicSalary + "," + bonus;
-    }
 }
